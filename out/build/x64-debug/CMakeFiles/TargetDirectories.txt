@@ -1,3 +1,0 @@
-D:/relearn-c/RelearnC/out/build/x64-debug/CMakeFiles/RelearnC.dir
-D:/relearn-c/RelearnC/out/build/x64-debug/CMakeFiles/edit_cache.dir
-D:/relearn-c/RelearnC/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
