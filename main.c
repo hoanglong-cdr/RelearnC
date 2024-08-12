@@ -1290,6 +1290,153 @@ void challengeDynamicAllocatedMemory() {
 	text = NULL;
 }
 
+void learnStruct() {
+	struct  date
+	{
+		int day;
+		int month;
+		int year;
+	};
+
+	struct date today = { .day = 10, .month = 9, .year = 2015 };
+	struct date purchaseDate;
+
+	printf("Today's date is %i-%i-%.2i.\n", today.month, today.day, today.year % 100);
+}
+
+struct employee
+{
+	char name[100];
+	int hireDate;
+	float salary;
+};
+
+void challengeDeclaringAndInitializingAStructure() {
+
+	struct employee emp = {
+		.name = "David",
+		.hireDate = 30,
+		.salary = 10000
+	};
+
+	printf("The employee 1: %s - %i - %.2f", emp.name, emp.hireDate, emp.salary);
+	//printf("\nEnter the name of employee: ");
+	//scanf("%99s", emp.name); // limit input to avoid buffer overflow
+
+	//printf("\nEnter the hire date of employee: ");
+	//scanf("%i", &emp.hireDate);
+
+	//printf("\nEnter the salary of employee: ");
+	//scanf("%f", &emp.salary);
+
+
+	struct employee emp2 = emp;
+
+	strcpy(emp2.name, "Long");
+
+	printf("\nThe employee 1: %s - %i - %.2f", emp.name, emp.hireDate, emp.salary);
+	printf("\nThe employee 2: %s - %i - %.2f", emp2.name, emp2.hireDate, emp2.salary);
+}
+
+
+struct Time {
+	struct Date {
+		int day;
+		int month;
+		int year;
+	} dob;
+
+	int hours;
+	int minutes;
+	int seconds;
+};
+void learnNestedStructures() {
+	struct Date date = { 10, 20, 2024 };
+
+	printf("The date: %i - %i - %i", date.day, date.month, date.year);
+}
+
+void learnStructAndPointer() {
+	struct Date date = { 10, 20, 2024 };
+	struct Date* datePtr = &date;
+
+	printf("The date: %i - %i - %i", (*datePtr).day, (*datePtr).month, (*datePtr).year);
+	(*datePtr).day = 20;
+	printf("\nThe date: %i - %i - %i", (*datePtr).day, (*datePtr).month, (*datePtr).year);
+	printf("\nThe date: %i - %i - %i", datePtr->day, datePtr->month, datePtr->year);
+}
+
+struct date {
+	int month;
+	int day;
+	int year;
+};
+
+void exampleStructAndPointers() {
+	struct date today, * datePtr;
+
+	datePtr = &today;
+
+	datePtr->day = 9;
+	datePtr->month = 10;
+	datePtr->year = 2024;
+
+	printf("Today's date is: %i - %i - %.2i\n", datePtr->month, datePtr->day, datePtr->year & 100);
+}
+
+void learnStructureContainingPointer() {
+	struct intPtrs {
+		int* p1;
+		int* p2;
+	};
+
+	struct intPtrs pointers, * pointersPtr = &pointers;
+	int i1 = 10, i2;
+	pointers.p1 = &i1;
+	pointers.p2 = &i2;
+
+	*pointers.p2 = -97;
+
+	printf("i1 = %i, *pointers.p1 = %i\n", i1, *pointersPtr->p1);
+	printf("i2 = %i, *pointers.p2 = %i\n", i2, *pointers.p2);
+}
+
+struct namect {
+	char* fname;
+	char* lname;
+};
+
+#define SLEN 500
+
+void getinfo(struct namect* pst) {
+	char temp[SLEN];
+	printf("Please eneter your first name.\n");
+	gets_s(temp, SLEN);
+
+	pst->lname = (char*)malloc(strlen(temp) + 1);
+
+	strcpy(pst->lname, temp);
+
+	printf("Please enter your last name.\n");
+	gets_s(temp, SLEN);
+	pst->lname = (char*)malloc(strlen(temp) + 1);
+
+	strcpy(pst->lname, temp);
+}
+
+struct Family {
+	char* mother;
+	char* father;
+};
+
+bool siblings(const struct Family* const pmemebter1, const struct Family* const pmemebter2) {
+	if (strcmp(pmemebter1->mother, pmemebter2->mother) == 0)
+		return false;
+	else
+		return true;
+}
+
+
 int main(int argc, char* argv[]) {
 	//learnEnum();
 	//challengEnum();
@@ -1358,7 +1505,14 @@ int main(int argc, char* argv[]) {
 	//printf("%d", countAsterisks("|**|*|*|**||***||"));
 
 	//learnDynamicAllocateMemory();
-	challengeDynamicAllocatedMemory();
+	//challengeDynamicAllocatedMemory();
+
+	//learnStruct();
+	//challengeDeclaringAndInitializingAStructure();
+	//learnNestedStructures();
+	//learnStructAndPointer();
+	//exampleStructAndPointers();
+	learnStructureContainingPointer();
 
 
 	//if (NofScannedArguments != 1) {
