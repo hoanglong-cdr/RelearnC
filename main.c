@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 typedef long long ll;
 typedef long double ld;
@@ -739,10 +740,10 @@ int countStringCharacters(const char str[]) {
 void concatString(char result[], const char str1[], const char str2[]) {
 	int i = 0, j = 0;
 
-	for (i = 0;str1[i] != '\0'; i++)
+	for (i = 0; str1[i] != '\0'; i++)
 		result[i] = str1[i];
 
-	for (j = 0;str2[j] != '\0'; j++)
+	for (j = 0; str2[j] != '\0'; j++)
 		result[i + j] = str2[j];
 }
 
@@ -1437,6 +1438,307 @@ bool siblings(const struct Family* const pmemebter1, const struct Family* const 
 }
 
 
+struct Item
+{
+	char* itemName;
+	int quantity;
+	float price;
+	float amount;
+};
+
+void readItem(struct Item* item);
+void printItem(const struct Item* const item);
+
+void challengeStructuresAndFunctions() {
+	struct Item itm = { NULL, 0, 0.0, 0.0 };
+	struct Item* pitm = NULL;
+
+	pitm = &itm;
+
+	pitm->itemName = (char*)malloc(30 * sizeof(char));
+
+	if (pitm == NULL) exit(-1);
+
+	readItem(pitm);
+
+	printItem(pitm);
+
+	free(pitm->itemName);
+}
+
+void readItem(struct Item* item) {
+	printf("Enter the name of item: ");
+	scanf("%s", item->itemName);
+
+	printf("\nEnter the price of item: ");
+	scanf("%f", &item->price);
+
+	printf("\nEnter the quantity of item: ");
+	scanf("%d", &item->quantity);
+
+	item->amount = item->price * item->quantity;
+}
+
+void printItem(const struct Item* const item) {
+	printf("Name of item: %s", item->itemName);
+	printf("\nPrice of item: %.2f", item->price);
+	printf("\nQuantity of item: %i", item->quantity);
+	printf("\nAmount of item: %.2f", item->amount);
+}
+
+void learnFileInputAndOutput() {
+	FILE* pfile = NULL;
+	char* filename = "Test.txt";
+	//pfile = fopen(filename, "w");
+
+	pfile = rename(filename, "tes1.txt");
+
+	if (pfile == NULL)
+		printf("Failed to open %s.\n", filename);
+}
+
+void readingCharForAFile() {
+	FILE* fp;
+	int c;
+
+	fp = fopen("file.txt", "r");
+
+	if (fp == NULL) {
+		perror("Error in opening file");
+		return (-1);
+	}
+
+	while ((c = fgetc(fp)) != EOF)
+		printf("%c", c);
+
+	fclose(fp);
+	fp = NULL;
+}
+
+void readingStringForAFile() {
+	FILE* fp;
+	char str[61];
+	fp = fopen("file.txt", "r");
+
+	if (fp == NULL) {
+		perror("Error openining file.");
+		return;
+	}
+
+	while (fgets(str, 60, fp) != NULL)
+		printf("%s", str);
+
+	fclose(fp);
+	fp = NULL;
+	return;
+}
+
+void readingStringFormattedForFile() {
+	FILE* fp;
+	int year;
+	char str1[10], str2[10], str3[10];
+
+	fp = fopen("test.txt", "w+");
+	if (fp != NULL)
+		fputs("Hello how are 202", fp);
+
+	rewind(fp);
+
+	fscanf(fp, "%s %s %s %d", str1, str2, str3, &year);
+
+	printf("Read String1 |%s|\n", str1);
+	printf("Read String2 |%s|\n", str2);
+	printf("Read String3 |%s|\n", str3);
+	printf("Read Integer |%d|\n", year);
+
+	fclose(fp);
+	fp = NULL;
+}
+
+void challengeFindTheNumberOfLinesInAFile() {
+	FILE* fp = NULL;
+	int count = 1;
+	char c = ' ';
+
+	fp = fopen("file.txt", "r");
+	if (fp == NULL) {
+		perror("Error openning file");
+		return;
+	}
+
+	while ((c = fgetc(fp)) != EOF)
+		if (c == '\n') count++;
+
+	fclose(fp);
+	fp = NULL;
+
+	printf("The number of lines in a file: %d\n", count);
+}
+
+void learnWriteCharacterToFile() {
+	FILE* fp = NULL;
+	int ch;
+
+	fp = fopen("test1.txt", "a+");
+
+	fputc('\n', fp);
+	for (ch = 'a'; ch <= 'z'; ch++)
+		fputc(ch, fp);
+
+	fclose(fp);
+	fp = NULL;
+}
+
+void learnWriteStringToFile() {
+	FILE* fp = NULL;
+	fp = fopen("test1.txt", "a+");
+
+	fputs("\nThis is Jason Fedin Course.", fp);
+	fputs("I am happy to be here", fp);
+
+	fclose(fp);
+	fp = NULL;
+}
+
+void learnWriteFormatOutputToFile() {
+	FILE* fp = NULL;
+	fp = fopen("test1.txt", "w+");
+
+	fprintf(fp, "%s %s %s %s %d", "Hello", "my", "number", "is", 555);
+
+	fclose(fp);
+	fp = NULL;
+}
+
+#define FILENAME "file.txt"
+void challengeConvertCharactersInFileToUppercase() {
+	FILE* fp1 = NULL;
+	FILE* fp2 = NULL;
+
+	char ch = ' ';
+
+	fp1 = fopen(FILENAME, "r");
+
+	if (fp1 == NULL) {
+		perror("Error openining file.");
+		return;
+	}
+
+	fp2 = fopen("temp.txt", "w");
+
+	if (fp2 == NULL) {
+		perror("Error openining file.");
+		return;
+	}
+
+	while ((ch = fgetc(fp1)) != EOF) {
+		if (islower(ch)) {
+			ch = ch - 32;
+		}
+		fputc(ch, fp2);
+	}
+
+	fclose(fp1);
+	fclose(fp2);
+	fp1 = NULL;
+	fp2 = NULL;
+
+	remove(FILENAME);
+	fp2 = rename("temp.txt", FILENAME);
+
+	remove("temp.txt");
+
+	fp1 = fopen(FILENAME, "r");
+
+	if (fp1 == NULL) {
+		perror("Cannot opening file");
+		return;
+	}
+
+	while ((ch = fgetc(fp1)) != EOF)
+		printf("%c", ch);
+
+	fclose(fp1);
+	fp1 = NULL;
+	fp2 = NULL;
+}
+
+void learnFtell() {
+	FILE* fp;
+	int len;
+	fp = fopen(FILENAME, "r");
+
+	if (fp == NULL) {
+		perror("Error opening file");
+		return;
+	}
+
+	fseek(fp, 0, SEEK_END); // move to the end of file
+
+	len = ftell(fp);
+	fclose(fp);
+
+	printf("Total size of file.txt = %d bytes\n", len);
+}
+
+
+void learnFgetpos() {
+	FILE* fp;
+	fpos_t position;
+
+	fp = fopen(FILENAME, "w+");
+	fgetpos(fp, &position);
+	fputs("Hello, world", fp);
+
+	printf("%i", position);
+
+	fclose(fp);
+}
+
+void learnFseeks() {
+	FILE* fp;
+	fp = fopen(FILENAME, "w+");
+	fputs("This is Jason", fp);
+	fseek(fp, 7, SEEK_CUR);
+
+	fputs(" Hello how are you", fp);
+	fclose(fp);
+}
+
+void learnFSetPos() {
+	FILE* fp;
+	fpos_t position;
+
+	fp = fopen(FILENAME, "w+");
+	fgetpos(fp, &position);
+	fputs("Hello, world", fp);
+
+	fsetpos(fp, &position);
+	fputs("This is going to override previous content", fp);
+	fclose(fp);
+}
+
+void challengePrintTheContentReverse() {
+	FILE* fp = NULL;
+	int i = 0;
+	int cnt = 0;
+
+	fp = fopen(FILENAME, "r");
+
+	fseek(fp, 0, SEEK_END);
+
+	cnt = ftell(fp);
+
+	while (i < cnt) {
+		i++;
+		fseek(fp, -i, SEEK_END);
+		printf("%c", fgetc(fp));
+	}
+
+	fclose(fp);
+	fp = NULL;
+}
+
 int main(int argc, char* argv[]) {
 	//learnEnum();
 	//challengEnum();
@@ -1512,8 +1814,26 @@ int main(int argc, char* argv[]) {
 	//learnNestedStructures();
 	//learnStructAndPointer();
 	//exampleStructAndPointers();
-	learnStructureContainingPointer();
+	//learnStructureContainingPointer();
+	//challengeStructuresAndFunctions();
 
+	//learnFileInputAndOutput();
+	//readingCharForAFile();
+	//readingStringForAFile();
+	//readingStringFormattedForFile();
+	//challengeFindTheNumberOfLinesInAFile();
+
+	//learnWriteCharacterToFile();
+	//learnWriteStringToFile();
+	//learnWriteFormatOutputToFile();
+	//challengeConvertCharactersInFileToUppercase();
+
+	//learnFtell();
+	//learnFgetpos();
+	//learnFseeks();
+	//learnFSetPos();
+	challengePrintTheContentReverse();
+	//system("pause");
 
 	//if (NofScannedArguments != 1) {
 	//	exit(EXIT_FAILURE);
